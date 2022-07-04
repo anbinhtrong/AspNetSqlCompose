@@ -1,0 +1,33 @@
+﻿version: "3.9"
+
+networks:
+  api-network:
+    driver: bridge
+services:
+  sql:
+    container_name: sql1
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    networks:
+      - api-network
+    restart: always
+    ports:
+      - 1431:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Dance@2022
+  contoso:
+    build:
+      context: .
+    networks:
+      - api-network
+    container_name: contoso
+    environment:
+      - serverName=sql1,1433
+      - userName=sa
+      - password=Dance@2022
+      - databaseName=ContosoUniversity
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - sql1
