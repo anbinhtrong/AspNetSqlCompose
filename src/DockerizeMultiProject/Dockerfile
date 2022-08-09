@@ -20,5 +20,5 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app 
 #
-COPY --from=build /app/DockerizeMultiProject/out ./
+COPY --from=build-env /app/DockerizeMultiProject/out .
 ENTRYPOINT ["dotnet", "DockerizeMultiProject.dll"]
