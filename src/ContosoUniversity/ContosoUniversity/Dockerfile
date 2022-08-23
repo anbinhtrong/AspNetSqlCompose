@@ -1,5 +1,6 @@
-﻿# syntax=docker/dockerfile:1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+﻿ARG VERSION=6.0-alpine
+# syntax=docker/dockerfile:1
+FROM mcr.microsoft.com/dotnet/sdk:$VERSION AS build-env
 WORKDIR /app
 
 #Copy csproj and restore as distinct layers
@@ -11,7 +12,7 @@ COPY . ./
 RUN dotnet publish -c Release -o out
 
 #Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:$VERSION
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "ContosoUniversity.dll"]
+CMD ["dotnet", "ContosoUniversity.dll"]
